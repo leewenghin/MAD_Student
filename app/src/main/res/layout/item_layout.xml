@@ -11,8 +11,6 @@
         android:id="@+id/cardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="20dp"
-        android:width="4dip"
         app:cardBackgroundColor="@color/red"
         app:cardCornerRadius="20dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -29,8 +27,7 @@
                 android:layout_width="55dp"
                 android:layout_height="70dp"
                 android:layout_marginStart="4dp"
-                android:layout_marginTop="16dp"
-                android:background="@color/red"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/title_icon"
@@ -48,6 +45,7 @@
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/icon"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/project_title"
                 tools:ignore="MissingConstraints" />
 
             <TextView
@@ -62,11 +60,12 @@
                 android:textColor="@color/black"
                 app:layout_constraintStart_toEndOf="@+id/icon"
                 app:layout_constraintTop_toBottomOf="@+id/icon_title"
+                app:layout_constraintBottom_toTopOf="@+id/subDate"
                 tools:ignore="MissingConstraints" />
 
 
             <TextView
-                android:id="@+id/date"
+                android:id="@+id/subDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
@@ -76,6 +75,7 @@
                 android:singleLine="true"
                 android:text="Submission Date 2022/12/14 12:23AM"
                 android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/icon"
                 app:layout_constraintTop_toBottomOf="@+id/project_title"
                 tools:ignore="MissingConstraints" />
@@ -98,11 +98,13 @@
                 tools:ignore="MissingConstraints" />
 
             <ImageView
+                android:id="@+id/imageView2"
                 android:layout_width="14dp"
                 android:layout_height="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/status"
                 app:srcCompat="@drawable/right_arrow"
-                tools:layout_editor_absoluteX="299dp"
-                tools:layout_editor_absoluteY="43dp"
                 tools:ignore="MissingConstraints" />
 
 
