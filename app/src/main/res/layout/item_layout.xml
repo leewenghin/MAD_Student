@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="10dp">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
@@ -88,7 +88,7 @@
                 android:background="@drawable/round_deep_red_overdue_reject"
                 android:paddingHorizontal="15dp"
                 android:paddingVertical="2dp"
-                android:text="Reject"
+                android:text=""
                 android:textColor="@color/white"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"

@@ -1,23 +1,20 @@
 package com.example.project.fragment
 
-import android.annotation.SuppressLint
-import android.graphics.Color
+import android.content.Intent.getIntent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.project.ItemObject
 import com.example.project.MyAdapter
 import com.example.project.R
 import com.example.project.Submission
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.ktx.Firebase
+
 
 class TitleFragment: Fragment()  {
 
@@ -44,31 +41,32 @@ class TitleFragment: Fragment()  {
 
         submissionList = arrayListOf()
 
-        db.collection("submission").get()
-            .addOnSuccessListener {
-                if(!it.isEmpty){
-                    for(data in it.documents){
-                        val submission: Submission? = data.toObject(Submission::class.java)
-                        if(submission != null){
-                            submissionList.add(submission)
+        val userId = FirebaseAuth.getInstance().currentUser!!.uid
+
+        db.collection("users").document(userId).get().addOnSuccessListener { userSnapshot ->
+            if(userSnapshot.exists()){
+                val userData = userSnapshot.data
+                val studentBatch = userData?.get("batch") as String
+
+                db.collection("submission")
+                    .whereEqualTo("label", "Title").whereEqualTo("batch",studentBatch)
+                    .get()
+                    .addOnSuccessListener { submissionSnapshot ->
+                        if(!submissionSnapshot.isEmpty){
+                            for(data in submissionSnapshot.documents){
+                                val submission: Submission? = data.toObject(Submission::class.java)
+                                if(submission != null){
+                                    submissionList.add(submission)
+                                }
+                            }
+                            recyclerView.adapter = MyAdapter(submissionList)
                         }
                     }
-                    recyclerView.adapter = MyAdapter(submissionList)
-                }
+                    .addOnFailureListener{
+                        Toast.makeText(context, it.toString(), Toast.LENGTH_LONG).show()
+                    }
             }
-            .addOnFailureListener{
-                Toast.makeText(context, it.toString(), Toast.LENGTH_LONG).show()
-            }
-
-//        db.collection("submission")
-//            .whereEqualTo("status", "New")
-//            .get()
-//            .addOnSuccessListener {
-//                for (data in it.documents) {
-//                    // Set the background of the TextView to transparent
-//                    textView.setBackgroundColor(Color.TRANSPARENT)
-//                }
-//            }
+        }
 
         return view
     }

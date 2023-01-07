@@ -30,22 +30,16 @@ class MyAdapter(private val submissionList: ArrayList<Submission>) :
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.label.text = submissionList[position].label
         holder.sub_date.text = submissionList[position].date_created
-        holder.Status.text = submissionList[position].status
 
         when (holder.Status.text){
-            "New" -> {
-
-                holder.Status.setBackgroundColor(Color.TRANSPARENT)
-//                holder.Status.setBackgroundColor(Color.parseColor("#e7eecc"))
-                holder.cardView.setBackgroundResource(R.color.grey);
-                holder.Status.setText("")
-            }
             "" -> {
                 holder.Status.setBackgroundColor(Color.TRANSPARENT)
+                //                holder.Status.setBackgroundColor(Color.parseColor("#e7eecc"))
                 holder.cardView.setBackgroundResource(R.color.grey);
                 holder.Status.setText("")
             }
         }
+
     }
 
     override fun getItemCount(): Int {
