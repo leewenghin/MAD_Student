@@ -1,11 +1,17 @@
 package com.example.project
 
+import android.content.ContentValues.TAG
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.project.databinding.ActivityMainBinding
 import com.example.project.fragment.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -33,6 +39,26 @@ class MainActivity : AppCompatActivity() {
                 else -> {}
             }
             true
+        }
+
+        var db = FirebaseFirestore.getInstance()
+        val userId = FirebaseAuth.getInstance().currentUser!!.uid
+
+        db.collection("users").document(userId).get().addOnSuccessListener { userSnapshot->
+            if(userSnapshot.exists()){
+                val last_name = userSnapshot.getString("last_name")
+                val first_name = userSnapshot.getString("first_name")
+                val student_id = userSnapshot.getString("std_id")
+
+                val studentName = findViewById<TextView>(R.id.user_name)
+                val studentId = findViewById<TextView>(R.id.user_id)
+                studentName.setText(last_name + first_name)
+                studentId.setText(student_id)
+
+//                 Log.d(TAG, "${userSnapshot.id} => ${userSnapshot.data}")
+//                Toast.makeText(this, last_name + first_name + "\n" + student_id,
+//                    Toast.LENGTH_LONG).show()
+            }
         }
     }
 

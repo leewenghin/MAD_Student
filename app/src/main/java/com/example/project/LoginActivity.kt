@@ -78,7 +78,6 @@ class LoginActivity : AppCompatActivity() {
 
                             // Redirect to student dashboard
                             val intent = Intent(this, MainActivity::class.java)
-                            intent.putExtra("myUserId", userId)
                             startActivity(intent)
                             finish() // Close the current activity and remove it from the activity stack.
                         }
