@@ -43,24 +43,23 @@
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/project_title"
                 app:layout_constraintStart_toEndOf="@+id/icon"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/project_title"
                 tools:ignore="MissingConstraints" />
 
             <TextView
                 android:id="@+id/project_title"
-                android:layout_width="wrap_content"
+                android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="3dp"
-                android:layout_marginEnd="4dp"
                 android:maxLines="2"
-                android:text="Arduino Smart Temperature"
+                android:text=""
                 android:textColor="@color/black"
+                app:layout_constraintBottom_toTopOf="@+id/subDate"
                 app:layout_constraintStart_toEndOf="@+id/icon"
                 app:layout_constraintTop_toBottomOf="@+id/icon_title"
-                app:layout_constraintBottom_toTopOf="@+id/subDate"
                 tools:ignore="MissingConstraints" />
 
 

@@ -1,7 +1,6 @@
 package com.example.project
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.view.LayoutInflater
@@ -10,51 +9,53 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
-import androidx.core.content.ContextCompat.startActivity
+import androidx.core.content.ContextCompat
+import androidx.core.view.isInvisible
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.coroutines.withContext
-import java.security.AccessController.getContext
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
 
 class TitleAdapter(private val submissionList: ArrayList<Submission>) :
-    RecyclerView.Adapter<TitleAdapter.MyViewHolder>(){
+    RecyclerView.Adapter<TitleAdapter.MyViewHolder>() {
 
-    class MyViewHolder(itemView: View):RecyclerView.ViewHolder(itemView){
+    class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val label: TextView = itemView.findViewById(R.id.icon_title)
-        val sub_date: TextView = itemView.findViewById(R.id.subDate)
+        val due_date: TextView = itemView.findViewById(R.id.subDate)
         val Status: TextView = itemView.findViewById(R.id.status)
         val cardView: CardView = itemView.findViewById(R.id.cardView)
+        val Title: TextView = itemView.findViewById(R.id.project_title)
+        val colorStateListYellow = ContextCompat.getColorStateList(itemView.context, R.color.deep_yellow)
+        val colorStateListRed = ContextCompat.getColorStateList(itemView.context, R.color.deep_red)
+        val colorStateListGreen = ContextCompat.getColorStateList(itemView.context, R.color.deep_green)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_layout, parent, false)
+        val itemView =
+            LayoutInflater.from(parent.context).inflate(R.layout.item_layout, parent, false)
         return MyViewHolder(itemView)
     }
 
     @SuppressLint("SimpleDateFormat", "SetTextI18n")
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.label.text = submissionList[position].label
-        holder.sub_date.text = submissionList[position].deadline
+        holder.due_date.text = submissionList[position].deadline
         holder.Status.text = submissionList[position].status
-        val submissionId = submissionList[position].id
+        holder.Title.text = submissionList[position].title
 
-        holder.cardView.setOnClickListener(View.OnClickListener { view ->
-            Toast.makeText(view.context, submissionId + holder.sub_date.text, Toast.LENGTH_LONG).show()
-            val intent1 = Intent(view.context, SubmitWorkActivity::class.java)
-            intent1.putExtra("submissionId", submissionId)
-            view.context.startActivity(intent1)
-        })
+        // Replacing the submission_status
+        holder.Status.text = submissionList[position].submission_status
+
+        val submissionId = submissionList[position].submission_id
 
         // Deadline Date
-        val dlDate = SimpleDateFormat("dd-MM-yyyy HH:mm").parse(holder.sub_date.text as String)
+        val dlDate = SimpleDateFormat("dd-MM-yyyy HH:mm").parse(holder.due_date.text as String)
         val dlHourFormat = SimpleDateFormat("HH")
         val dlMinuteFormat = SimpleDateFormat("mm")
 
-        val dlHour = Integer. parseInt(dlHourFormat.format(dlDate as Date))
-        val dlMinute = Integer. parseInt(dlMinuteFormat.format(dlDate))
+        val dlHour = Integer.parseInt(dlHourFormat.format(dlDate as Date))
+        val dlMinute = Integer.parseInt(dlMinuteFormat.format(dlDate))
 
         val calendar1 = Calendar.getInstance()
         calendar1.set(Calendar.HOUR_OF_DAY, dlHour)
@@ -68,38 +69,88 @@ class TitleAdapter(private val submissionList: ArrayList<Submission>) :
         val currentTime = Date()
         calendar2.setTime(currentTime)
 
-        fun checkDate(){
-            //         Check if the current date is after the deadline
-            if(currentDate.after(dlDate)){
-                holder.Status.setBackgroundResource(R.color.deep_red)
-                holder.cardView.setBackgroundResource(R.color.red);
-                holder.Status.setText("Overdue")
+        var overdue = false
+
+        holder.cardView.setOnClickListener(View.OnClickListener { view ->
+            Toast.makeText(view.context, submissionId, Toast.LENGTH_LONG)
+                .show()
+
+            // Overdue, Pending, Rejected, Approve / Graded
+            when (holder.Status.text){
+                "" -> {
+                    val intent1 = Intent(view.context, TitleSubmissionActivity::class.java)
+                    intent1.putExtra("submissionId", submissionId)
+                    intent1.putExtra("label", holder.label.text)
+                    intent1.putExtra("deadline", holder.due_date.text)
+                    intent1.putExtra("overdue", overdue)
+
+                    view.context.startActivity(intent1)
+                }
+                "Overdue" -> {
+                    val intent1 = Intent(view.context, TitleSubmissionActivity::class.java)
+                    intent1.putExtra("submissionId", submissionId)
+                    intent1.putExtra("label", holder.label.text)
+                    intent1.putExtra("deadline", holder.due_date.text)
+                    intent1.putExtra("overdue", overdue)
+
+                    view.context.startActivity(intent1)
+                }
+                "Pending" -> {
+                    val intent1 = Intent(view.context, TitleSubmissionDetailActivity::class.java)
+                    intent1.putExtra("submissionId", submissionId)
+                    view.context.startActivity(intent1)
+                }
+                "Rejected" -> {}
+                "Approve" -> {}
             }
-            else if(currentDate == dlDate && calendar2.after(calendar1)){
-                holder.Status.setBackgroundResource(R.color.deep_red)
+
+        })
+
+        fun checkDate() {
+            //Check if the current date is after the deadline
+            if (currentDate.after(dlDate)) {
+                holder.Status.visibility = View.VISIBLE
+                holder.Status.backgroundTintList = holder.colorStateListRed
+//                holder.Status.setBackgroundResource(R.color.deep_red)
                 holder.cardView.setBackgroundResource(R.color.red);
-                holder.Status.setText("Overdue")
+                holder.Status.text = "Overdue"
+                overdue = true
+
+            } else if (currentDate == dlDate && calendar2.after(calendar1)) {
+                holder.Status.visibility = View.VISIBLE
+                holder.Status.backgroundTintList = holder.colorStateListRed
+//                holder.Status.setBackgroundResource(R.color.deep_red)
+                holder.cardView.setBackgroundResource(R.color.red);
+                holder.Status.text = "Overdue"
+                overdue = true
+            } else{
+                overdue = false
             }
         }
 
-            // Check status
-            when (holder.Status.text){
-                "" -> {
-                    holder.Status.setBackgroundColor(Color.TRANSPARENT)
-                    //holder.Status.setBackgroundColor(Color.parseColor("#e7eecc"))
-                    holder.cardView.setBackgroundResource(R.color.grey);
-                    holder.Status.setText("")
-                    checkDate()
+        // If project_title is blank then Textview will gone
+        if(holder.Title.text == "" ){
+            holder.Title.visibility = View.GONE
+        }
 
-                }
-                "Pending" -> {
-                    holder.Status.setBackgroundResource(R.color.deep_yellow)
-                    holder.cardView.setBackgroundResource(R.color.yellow);
-                }
-                else -> {
-                    checkDate()
-                }
+        // Check status
+        when (holder.Status.text) {
+            "" -> {
+                holder.Status.visibility = View.INVISIBLE
+                holder.cardView.setBackgroundResource(R.color.grey);
+//                holder.Status.setBackgroundColor(Color.TRANSPARENT)
+                //holder.Status.setBackgroundColor(Color.parseColor("#e7eecc"))
+                checkDate()
             }
+            "Pending" -> {
+                holder.Status.backgroundTintList = holder.colorStateListYellow
+//                holder.Status.setBackgroundResource(R.color.deep_yellow)
+                holder.cardView.setBackgroundResource(R.color.yellow);
+            }
+            else -> {
+                checkDate()
+            }
+        }
     }
 
     override fun getItemCount(): Int {
