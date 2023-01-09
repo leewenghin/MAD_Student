@@ -94,6 +94,13 @@ class TitleAdapter(private val submissionList: ArrayList<Submission>) :
             Toast.makeText(view.context, submissionId, Toast.LENGTH_LONG)
                 .show()
 
+            // If Pending, Rejected or Approve, then show detail.
+            fun checkDetail(){
+                val intent1 = Intent(view.context, TitleSubmissionDetailActivity::class.java)
+                intent1.putExtra("submissionId", submissionId)
+                view.context.startActivity(intent1)
+            }
+
             // Overdue, Pending, Rejected, Approve / Graded
             when (holder.Status.text) {
                 "" -> {
@@ -115,18 +122,15 @@ class TitleAdapter(private val submissionList: ArrayList<Submission>) :
                     view.context.startActivity(intent1)
                 }
                 "Pending" -> {
-                    val intent1 = Intent(view.context, TitleSubmissionDetailActivity::class.java)
-                    intent1.putExtra("submissionId", submissionId)
-                    view.context.startActivity(intent1)
+                    checkDetail()
                 }
                 "Rejected" -> {
-
+                    checkDetail()
                 }
-                "Approve" -> {
-
+                "Approved" -> {
+                    checkDetail()
                 }
             }
-
         }
 
         fun checkDate() {
@@ -170,9 +174,11 @@ class TitleAdapter(private val submissionList: ArrayList<Submission>) :
 //                holder.Status.setBackgroundResource(R.color.deep_yellow)
                 holder.cardView.setBackgroundResource(R.color.yellow);
             }
-            else -> {
-                checkDate()
+            "Approved" -> {
+                holder.Status.backgroundTintList = holder.colorStateListGreen
+                holder.cardView.setBackgroundResource(R.color.green);
             }
+            else -> {}
         }
     }
 

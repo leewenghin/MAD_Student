@@ -27,6 +27,7 @@ class TitleSubmissionDetailActivity : AppCompatActivity() {
         val Title = findViewById<TextView>(R.id.project_title)
         val Status = findViewById<TextView>(R.id.status)
         val Submissiondate = findViewById<TextView>(R.id.submission_date)
+        val Feedback = findViewById<TextView>(R.id.input_feedback)
         val btnUndo = findViewById<Button>(R.id.btn_undo)
 
         val submissionReference = db.collection("submission")
@@ -41,10 +42,12 @@ class TitleSubmissionDetailActivity : AppCompatActivity() {
                                 val title = subCollectionSnapshot.getString("title")
                                 val submissionStatus = subCollectionSnapshot.getString("submission_status")
                                 val submissionDate = subCollectionSnapshot.getString("submission_date")
+                                val feedback = subCollectionSnapshot.getString("feedback")
 
                                 Title.text = title
                                 Status.text = submissionStatus
                                 Submissiondate.text = submissionDate
+                                Feedback.text = feedback
 
                                 if (submissionStatus != null) {
                                     checkStatus(submissionStatus, Status, btnUndo)
@@ -70,6 +73,13 @@ class TitleSubmissionDetailActivity : AppCompatActivity() {
                 // Will hide the button and it will not take up any space in the layout
                 // button.isVisible = false
             }
+            "Approved" -> {
+                val colorStateList = ContextCompat.getColorStateList(this, R.color.deep_green)
+                Status.setBackgroundTintList(colorStateList)
+                // Will hide the button, but it will still take up space in the layout
+                btnUndo.visibility = View.INVISIBLE
+            }
+            else -> {}
         }
     }
 }
