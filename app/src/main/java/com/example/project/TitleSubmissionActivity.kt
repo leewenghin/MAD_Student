@@ -65,7 +65,8 @@ class TitleSubmissionActivity : AppCompatActivity() {
                         "abstract" to Comment,
                         "submission_date" to dateSubmit,
                         "submission_status" to "Pending",
-                        "overdue" to Overdue
+                        "overdue" to Overdue,
+                        "user_id" to userId
                     )
 
                     newDocument.collection("users").document(userId).set(data)
