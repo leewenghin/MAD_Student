@@ -44,11 +44,10 @@ class TitleAdapter(private val submissionList: ArrayList<Submission>) :
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.label.text = submissionList[position].label
         holder.due_date.text = submissionList[position].deadline
-        holder.Status.text = submissionList[position].status
+        holder.Status.text = submissionList[position].submission_status
         holder.Title.text = submissionList[position].title
 
         // Replacing the submission_status
-        holder.Status.text = submissionList[position].submission_status
 
         val submissionId = submissionList[position].submission_id
 
@@ -120,8 +119,12 @@ class TitleAdapter(private val submissionList: ArrayList<Submission>) :
                     intent1.putExtra("submissionId", submissionId)
                     view.context.startActivity(intent1)
                 }
-                "Rejected" -> {}
-                "Approve" -> {}
+                "Rejected" -> {
+
+                }
+                "Approve" -> {
+
+                }
             }
 
         }
