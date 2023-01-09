@@ -3,6 +3,7 @@ package com.example.project
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,8 @@ import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.core.view.isInvisible
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -61,6 +64,23 @@ class TitleAdapter(private val submissionList: ArrayList<Submission>) :
         calendar1.set(Calendar.HOUR_OF_DAY, dlHour)
         calendar1.set(Calendar.MINUTE, dlMinute)
 
+        // Replace student mark
+//        val db = FirebaseFirestore.getInstance()
+//        val userId = FirebaseAuth.getInstance().currentUser!!.uid
+//
+//        db.collection("submission").document(submissionId.toString()).get()
+//            .addOnSuccessListener { submissionSnapshot ->
+//                submissionSnapshot.reference.collection("users").document(userId).get()
+//                    .addOnSuccessListener { usersSnapshot ->
+//                        usersSnapshot.reference.collection("mark").get()
+//                            .addOnSuccessListener { markSnapshot ->
+//                                for(data in markSnapshot){
+//                                    val mark = data.getString("proposal")
+//                                    holder.label.text = mark
+//                                }
+//                            }
+//                    }
+//            }
 
         // Current Date
         val currentDate = Calendar.getInstance().time
@@ -71,12 +91,12 @@ class TitleAdapter(private val submissionList: ArrayList<Submission>) :
 
         var overdue = false
 
-        holder.cardView.setOnClickListener(View.OnClickListener { view ->
+        holder.cardView.setOnClickListener { view ->
             Toast.makeText(view.context, submissionId, Toast.LENGTH_LONG)
                 .show()
 
             // Overdue, Pending, Rejected, Approve / Graded
-            when (holder.Status.text){
+            when (holder.Status.text) {
                 "" -> {
                     val intent1 = Intent(view.context, TitleSubmissionActivity::class.java)
                     intent1.putExtra("submissionId", submissionId)
@@ -104,7 +124,7 @@ class TitleAdapter(private val submissionList: ArrayList<Submission>) :
                 "Approve" -> {}
             }
 
-        })
+        }
 
         fun checkDate() {
             //Check if the current date is after the deadline
