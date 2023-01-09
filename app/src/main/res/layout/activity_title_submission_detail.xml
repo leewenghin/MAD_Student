@@ -62,7 +62,7 @@
         app:layout_constraintVertical_bias="0.5">
 
         <TextView
-            android:layout_width="118dp"
+            android:layout_width="wrap_content"
             android:layout_height="27dp"
             android:text="Submission Date"
             android:textAlignment="textStart"
