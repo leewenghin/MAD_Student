@@ -51,6 +51,8 @@ class TitleAdapter(private val submissionList: ArrayList<Submission>) :
 
         val submissionId = submissionList[position].submission_id
         val submissionStatus = submissionList[position].submission_status
+        val abstract = submissionList[position].abstract
+        val title = submissionList[position].title
 
         // Deadline Date
         val dlDate = SimpleDateFormat("dd-MM-yyyy HH:mm").parse(holder.due_date.text as String)
@@ -127,6 +129,8 @@ class TitleAdapter(private val submissionList: ArrayList<Submission>) :
                     intent1.putExtra("submissionId", submissionId)
                     intent1.putExtra("submissionStatus", submissionStatus)
                     intent1.putExtra("label", holder.label.text)
+                    intent1.putExtra("title", title)
+                    intent1.putExtra("abstract", abstract)
                     intent1.putExtra("deadline", holder.due_date.text)
                     intent1.putExtra("overdue", overdue)
                     view.context.startActivity(intent1)
