@@ -1,34 +1,27 @@
 package com.example.project
 
-import android.graphics.Color
-import android.graphics.Color.RED
-import android.graphics.Color.red
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
-import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
-import androidx.core.view.isInvisible
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import org.w3c.dom.Text
 
-class TitleSubmissionDetailActivity : AppCompatActivity() {
+class ThesisSubmissionDetailActivity : AppCompatActivity() {
     private var db = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_title_submission_detail)
+        setContentView(R.layout.activity_thesis_submission_detail)
         val submissionId = intent.getStringExtra("submissionId")
 
         val Title = findViewById<TextView>(R.id.project_title)
         val Status = findViewById<TextView>(R.id.status)
         val Submissiondate = findViewById<TextView>(R.id.submission_date)
         val Feedback = findViewById<TextView>(R.id.input_feedback)
-        val btnRedo = findViewById<Button>(R.id.btn_redo)
+        val btnUndo = findViewById<Button>(R.id.btn_undo)
 
         val submissionReference = db.collection("submission")
         val userId = FirebaseAuth.getInstance().currentUser!!.uid
@@ -50,23 +43,22 @@ class TitleSubmissionDetailActivity : AppCompatActivity() {
                                 Feedback.text = feedback
 
                                 if (submissionStatus != null) {
-                                    checkStatus(submissionStatus, Status, btnRedo)
+                                    checkStatus(submissionStatus, Status, btnUndo)
                                 }
                             }
                         }
                 }
             }
     }
-
     // Pending, Pending(TextView)
-    fun checkStatus(status: String, Status: TextView, button: Button){
+    fun checkStatus(status: String, Status: TextView, btnUndo: Button){
         when(status){
             "Pending" -> {
                 val colorStateList = ContextCompat.getColorStateList(this, R.color.deep_yellow)
                 Status.setBackgroundTintList(colorStateList)
 
                 // Will hide the button, but it will still take up space in the layout
-                button.visibility = View.INVISIBLE
+                btnUndo.visibility = View.INVISIBLE
 
                 // Will hide the button and it will not take up any space in the layout
                 // button.visibility = View.GONE
@@ -78,7 +70,7 @@ class TitleSubmissionDetailActivity : AppCompatActivity() {
                 val colorStateList = ContextCompat.getColorStateList(this, R.color.deep_green)
                 Status.setBackgroundTintList(colorStateList)
                 // Will hide the button, but it will still take up space in the layout
-                button.visibility = View.INVISIBLE
+                btnUndo.visibility = View.INVISIBLE
             }
             else -> {}
         }
