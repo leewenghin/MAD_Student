@@ -118,6 +118,9 @@ class ThesisSubmissionActivity : AppCompatActivity() {
                         val firstName = usersSnapshot.getString("first_name")
                         val studentId = usersSnapshot.getString("std_id")
 
+                        // Query to "submission" collection with specific document id
+                        newDocument = db.collection("submission").document(submissionId.toString())
+
                         // Prepare the data to store
                         val data = mapOf(
                             "last_name" to lastName,
@@ -134,10 +137,7 @@ class ThesisSubmissionActivity : AppCompatActivity() {
                             "file_Submited" to tvFileName!!.text
                         )
 
-                        // Query to "submission" collection with specific document id
-                        newDocument = db.collection("submission").document(submissionId.toString())
-
-                        //
+                        // Query to save the data into "users" sub-collection of "submission" collection
                         newDocument!!.collection("users").document(userId).set(data)
                             .addOnSuccessListener { documentReference ->
                                 // The data was successfully saved

@@ -97,6 +97,9 @@ class TitleSubmissionActivity : AppCompatActivity() {
                 val firstName = usersSnapshot.getString("first_name")
                 val studentId = usersSnapshot.getString("std_id")
 
+                // Get to same document id of "submission" collection
+                newDocument = db.collection("submission").document(submissionId.toString())
+
                 val data = mapOf(
                     "last_name" to lastName,
                     "first_name" to firstName,
@@ -111,9 +114,6 @@ class TitleSubmissionActivity : AppCompatActivity() {
                     "overdue" to Overdue,
                     "user_id" to userId
                 )
-
-                // Get to same document id of "submission" collection
-                newDocument = db.collection("submission").document(submissionId.toString())
 
                 // Query to save the data into "users" sub-collection of "submission" collection
                 newDocument!!.collection("users").document(userId).set(data)
