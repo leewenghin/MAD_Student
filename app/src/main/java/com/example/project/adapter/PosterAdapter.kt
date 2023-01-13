@@ -1,7 +1,9 @@
-package com.example.project.adapter
+package com.example.project
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,17 +11,17 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
+import androidx.core.view.isInvisible
 import androidx.recyclerview.widget.RecyclerView
-import com.example.project.R
-import com.example.project.Submission
-import com.example.project.TitleSubmissionActivity
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
 
-class TitleAdapter(private val submissionList: ArrayList<Submission>) :
-    RecyclerView.Adapter<TitleAdapter.MyViewHolder>() {
+class PosterAdapter(private val submissionList: ArrayList<Submission>) :
+    RecyclerView.Adapter<PosterAdapter.MyViewHolder>() {
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val label: TextView = itemView.findViewById(R.id.icon_title)
@@ -27,13 +29,9 @@ class TitleAdapter(private val submissionList: ArrayList<Submission>) :
         val Status: TextView = itemView.findViewById(R.id.status)
         val cardView: CardView = itemView.findViewById(R.id.cardView)
         val Title: TextView = itemView.findViewById(R.id.project_title)
-        val colorStateListYellow = ContextCompat.getColorStateList(itemView.context,
-            R.color.deep_yellow
-        )
+        val colorStateListYellow = ContextCompat.getColorStateList(itemView.context, R.color.deep_yellow)
         val colorStateListRed = ContextCompat.getColorStateList(itemView.context, R.color.deep_red)
-        val colorStateListGreen = ContextCompat.getColorStateList(itemView.context,
-            R.color.deep_green
-        )
+        val colorStateListGreen = ContextCompat.getColorStateList(itemView.context, R.color.deep_green)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -98,7 +96,7 @@ class TitleAdapter(private val submissionList: ArrayList<Submission>) :
 
             // If Pending, Rejected or Approve, then show detail.
             fun checkDetail(){
-                val intent1 = Intent(view.context, TitleSubmissionActivity::class.java)
+                val intent1 = Intent(view.context, PosterSubmissionActivity::class.java)
                 intent1.putExtra("submissionId", submissionId)
                 view.context.startActivity(intent1)
             }
@@ -106,7 +104,7 @@ class TitleAdapter(private val submissionList: ArrayList<Submission>) :
             // Overdue, Pending, Rejected, Approve / Graded
             when (holder.Status.text) {
                 "" -> {
-                    val intent1 = Intent(view.context, TitleSubmissionActivity::class.java)
+                    val intent1 = Intent(view.context, PosterSubmissionActivity::class.java)
                     intent1.putExtra("submissionId", submissionId)
                     intent1.putExtra("label", holder.label.text)
                     intent1.putExtra("deadline", holder.due_date.text)
@@ -115,7 +113,7 @@ class TitleAdapter(private val submissionList: ArrayList<Submission>) :
                     view.context.startActivity(intent1)
                 }
                 "Overdue" -> {
-                    val intent1 = Intent(view.context, TitleSubmissionActivity::class.java)
+                    val intent1 = Intent(view.context, PosterSubmissionActivity::class.java)
                     intent1.putExtra("submissionId", submissionId)
                     intent1.putExtra("label", holder.label.text)
                     intent1.putExtra("deadline", holder.due_date.text)

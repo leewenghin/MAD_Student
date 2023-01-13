@@ -10,16 +10,17 @@ import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.example.project.ProposalSubmissionActivity
+import com.example.project.ProposalSubmissionDetailActivity
 import com.example.project.R
 import com.example.project.Submission
-import com.example.project.TitleSubmissionActivity
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
 
-class TitleAdapter(private val submissionList: ArrayList<Submission>) :
-    RecyclerView.Adapter<TitleAdapter.MyViewHolder>() {
+class ProposalAdapter(private val submissionList: ArrayList<Submission>) :
+    RecyclerView.Adapter<ProposalAdapter.MyViewHolder>() {
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val label: TextView = itemView.findViewById(R.id.icon_title)
@@ -98,7 +99,7 @@ class TitleAdapter(private val submissionList: ArrayList<Submission>) :
 
             // If Pending, Rejected or Approve, then show detail.
             fun checkDetail(){
-                val intent1 = Intent(view.context, TitleSubmissionActivity::class.java)
+                val intent1 = Intent(view.context, ProposalSubmissionDetailActivity::class.java)
                 intent1.putExtra("submissionId", submissionId)
                 view.context.startActivity(intent1)
             }
@@ -106,7 +107,7 @@ class TitleAdapter(private val submissionList: ArrayList<Submission>) :
             // Overdue, Pending, Rejected, Approve / Graded
             when (holder.Status.text) {
                 "" -> {
-                    val intent1 = Intent(view.context, TitleSubmissionActivity::class.java)
+                    val intent1 = Intent(view.context, ProposalSubmissionActivity::class.java)
                     intent1.putExtra("submissionId", submissionId)
                     intent1.putExtra("label", holder.label.text)
                     intent1.putExtra("deadline", holder.due_date.text)
@@ -115,7 +116,7 @@ class TitleAdapter(private val submissionList: ArrayList<Submission>) :
                     view.context.startActivity(intent1)
                 }
                 "Overdue" -> {
-                    val intent1 = Intent(view.context, TitleSubmissionActivity::class.java)
+                    val intent1 = Intent(view.context, ProposalSubmissionActivity::class.java)
                     intent1.putExtra("submissionId", submissionId)
                     intent1.putExtra("label", holder.label.text)
                     intent1.putExtra("deadline", holder.due_date.text)

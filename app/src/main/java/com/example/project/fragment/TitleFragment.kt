@@ -36,8 +36,6 @@ class TitleFragment : Fragment() {
         recyclerView = view.findViewById(R.id.recycleview_result)
         recyclerView.layoutManager = LinearLayoutManager(context)
 
-
-
         submissionList = arrayListOf()
 
         val userId = FirebaseAuth.getInstance().currentUser!!.uid
