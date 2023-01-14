@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -24,7 +25,7 @@ class PosterSubmissionDetailActivity : AppCompatActivity() {
     private var btnRedo: Button? = null
 
     // Variable for data from "user" sub-collection with specific document id
-    private var title: String? = null
+    private var label: String? = null
     private var submissionStatus: String? = null
     private var submissionDate: String? = null
     private var feedback: String? = null
@@ -35,6 +36,7 @@ class PosterSubmissionDetailActivity : AppCompatActivity() {
 
         // Declare variable for data from previous activity
         submissionId = intent.getStringExtra("submissionId")
+        label = intent.getStringExtra("label")
 
         // Declare variable for view or button
         tvTitle = findViewById(R.id.project_title)
@@ -53,13 +55,13 @@ class PosterSubmissionDetailActivity : AppCompatActivity() {
                     submissionSnapshot.reference.collection("users").document(userId).get()
                         .addOnSuccessListener { subCollectionSnapshot ->
                             if (subCollectionSnapshot.exists()) {
-                                title = subCollectionSnapshot.getString("title")
+                                label = subCollectionSnapshot.getString("label")
                                 submissionStatus =
                                     subCollectionSnapshot.getString("submission_status")
                                 submissionDate = subCollectionSnapshot.getString("submission_date")
                                 feedback = subCollectionSnapshot.getString("feedback")
 
-                                tvTitle!!.text = title
+                                tvTitle!!.text = label
                                 tvStatus!!.text = submissionStatus
                                 tvSubmissionDate!!.text = submissionDate
                                 tvFeedback!!.text = feedback

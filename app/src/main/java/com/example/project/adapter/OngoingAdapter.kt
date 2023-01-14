@@ -22,6 +22,7 @@ class OngoingAdapter(private val submissionList: ArrayList<Submission>) :
     private var intent1: Intent? = null
     private var intent2: Intent? = null
     private var intent3: Intent? = null
+    private var intent4: Intent? = null
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val label: TextView = itemView.findViewById(R.id.icon_title)
@@ -57,9 +58,10 @@ class OngoingAdapter(private val submissionList: ArrayList<Submission>) :
         val submissionStatus = submissionList[position].submission_status
         val abstract = submissionList[position].abstract
         val title = submissionList[position].title
+        val deadline = submissionList[position].deadline
 
         // Deadline Date
-        val dlDate = SimpleDateFormat("dd-MM-yyyy HH:mm").parse(holder.due_date.text as String)
+        val dlDate = SimpleDateFormat("dd-MM-yyyy HH:mm").parse(deadline!!)
         val dlHourFormat = SimpleDateFormat("HH")
         val dlMinuteFormat = SimpleDateFormat("mm")
 
@@ -69,6 +71,37 @@ class OngoingAdapter(private val submissionList: ArrayList<Submission>) :
         val calendar1 = Calendar.getInstance()
         calendar1.set(Calendar.HOUR_OF_DAY, dlHour)
         calendar1.set(Calendar.MINUTE, dlMinute)
+
+        // Current Date
+        val currentDate = Calendar.getInstance().time
+
+        val calendar2 = Calendar.getInstance()
+        val currentTime = Date()
+        calendar2.setTime(currentTime)
+
+        var overdue = false
+
+        fun checkDate() {
+            //Check if the current date is after the deadline
+            if (currentDate.after(dlDate)) {
+                holder.Status.visibility = View.VISIBLE
+                holder.Status.backgroundTintList = holder.colorStateListRed
+                // holder.Status.setBackgroundResource(R.color.deep_red)
+                holder.cardView.setBackgroundResource(R.color.red);
+                holder.Status.text = "Overdue"
+                overdue = true
+
+            } else if (currentDate == dlDate && calendar2.after(calendar1)) {
+                holder.Status.visibility = View.VISIBLE
+                holder.Status.backgroundTintList = holder.colorStateListRed
+                // holder.Status.setBackgroundResource(R.color.deep_red)
+                holder.cardView.setBackgroundResource(R.color.red);
+                holder.Status.text = "Overdue"
+                overdue = true
+            } else{
+                overdue = false
+            }
+        }
 
         // Replace student mark
 //        val db = FirebaseFirestore.getInstance()
@@ -87,15 +120,6 @@ class OngoingAdapter(private val submissionList: ArrayList<Submission>) :
 //                            }
 //                    }
 //            }
-
-        // Current Date
-        val currentDate = Calendar.getInstance().time
-
-        val calendar2 = Calendar.getInstance()
-        val currentTime = Date()
-        calendar2.setTime(currentTime)
-
-        var overdue = false
 
         holder.cardView.setOnClickListener { view ->
             Toast.makeText(view.context, submissionId, Toast.LENGTH_LONG)
@@ -147,6 +171,13 @@ class OngoingAdapter(private val submissionList: ArrayList<Submission>) :
             fun proposalSubmit(){
                 val intent3 = Intent(view.context, ProposalSubmissionActivity::class.java)
                 intent3.putExtra("submissionId", submissionId)
+                intent3.putExtra("label", holder.label.text)
+                intent3.putExtra("deadline", holder.due_date.text)
+                intent3.putExtra("overdue", overdue)
+
+                intent3.putExtra("submissionStatus", submissionStatus)
+                intent3.putExtra("title", title)
+                intent3.putExtra("abstract", abstract)
                 view.context.startActivity(intent3)
             }
 
@@ -154,35 +185,28 @@ class OngoingAdapter(private val submissionList: ArrayList<Submission>) :
             fun proposalDetail(){
                 intent3 = Intent(view.context, ProposalSubmissionDetailActivity::class.java)
                 intent3!!.putExtra("submissionId", submissionId)
-                intent3!!.putExtra("label", holder.label.text)
-                intent3!!.putExtra("deadline", holder.due_date.text)
-                intent3!!.putExtra("overdue", overdue)
-
-                intent3!!.putExtra("submissionStatus", submissionStatus)
-                intent3!!.putExtra("title", title)
-                intent3!!.putExtra("abstract", abstract)
                 view.context.startActivity(intent3)
             }
 
             // If Pending, Rejected or Approve, then show detail.
             fun thesisSubmit(){
-                val intent3 = Intent(view.context, ThesisSubmissionActivity::class.java)
-                intent3.putExtra("submissionId", submissionId)
-                view.context.startActivity(intent3)
+                val intent4 = Intent(view.context, ThesisSubmissionActivity::class.java)
+                intent4.putExtra("submissionId", submissionId)
+                intent4.putExtra("label", holder.label.text)
+                intent4.putExtra("deadline", holder.due_date.text)
+                intent4.putExtra("overdue", overdue)
+
+                intent4.putExtra("submissionStatus", submissionStatus)
+                intent4.putExtra("title", title)
+                intent4.putExtra("abstract", abstract)
+                view.context.startActivity(intent4)
             }
 
             // If new, overdue, pending(title), then show submit activity
             fun thesisDetail(){
-                intent3 = Intent(view.context, ThesisSubmissionDetailActivity::class.java)
-                intent3!!.putExtra("submissionId", submissionId)
-                intent3!!.putExtra("label", holder.label.text)
-                intent3!!.putExtra("deadline", holder.due_date.text)
-                intent3!!.putExtra("overdue", overdue)
-
-                intent3!!.putExtra("submissionStatus", submissionStatus)
-                intent3!!.putExtra("title", title)
-                intent3!!.putExtra("abstract", abstract)
-                view.context.startActivity(intent3)
+                intent4 = Intent(view.context, ThesisSubmissionDetailActivity::class.java)
+                intent4!!.putExtra("submissionId", submissionId)
+                view.context.startActivity(intent4)
             }
 
             when(holder.label.text){
@@ -239,7 +263,7 @@ class OngoingAdapter(private val submissionList: ArrayList<Submission>) :
                             proposalSubmit()
                         }
                         "Rejected" -> {
-                            proposalSubmit()
+                            proposalDetail()
                         }
                         "Approved" -> {
                             proposalDetail()
@@ -259,7 +283,7 @@ class OngoingAdapter(private val submissionList: ArrayList<Submission>) :
                             proposalSubmit()
                         }
                         "Rejected" -> {
-                            proposalSubmit()
+                            proposalDetail()
                         }
                         "Approved" -> {
                             proposalDetail()
@@ -279,7 +303,7 @@ class OngoingAdapter(private val submissionList: ArrayList<Submission>) :
                             thesisSubmit()
                         }
                         "Rejected" -> {
-                            thesisSubmit()
+                            thesisDetail()
                         }
                         "Approved" -> {
                             thesisDetail()
@@ -299,35 +323,13 @@ class OngoingAdapter(private val submissionList: ArrayList<Submission>) :
                             thesisSubmit()
                         }
                         "Rejected" -> {
-                            thesisSubmit()
+                            thesisDetail()
                         }
                         "Approved" -> {
                             thesisDetail()
                         }
                     }
                 }
-            }
-        }
-
-        fun checkDate() {
-            //Check if the current date is after the deadline
-            if (currentDate.after(dlDate)) {
-                holder.Status.visibility = View.VISIBLE
-                holder.Status.backgroundTintList = holder.colorStateListRed
-                // holder.Status.setBackgroundResource(R.color.deep_red)
-                holder.cardView.setBackgroundResource(R.color.red);
-                holder.Status.text = "Overdue"
-                overdue = true
-
-            } else if (currentDate == dlDate && calendar2.after(calendar1)) {
-                holder.Status.visibility = View.VISIBLE
-                holder.Status.backgroundTintList = holder.colorStateListRed
-                // holder.Status.setBackgroundResource(R.color.deep_red)
-                holder.cardView.setBackgroundResource(R.color.red);
-                holder.Status.text = "Overdue"
-                overdue = true
-            } else{
-                overdue = false
             }
         }
 

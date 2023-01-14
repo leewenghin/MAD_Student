@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.project.PosterAdapter
 import com.example.project.R
 import com.example.project.Submission
+import com.example.project.adapter.OngoingAdapter
 import com.example.project.adapter.TitleAdapter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -68,7 +69,7 @@ class FragmentResult : Fragment() {
                                         if (submission != null) {
                                             submissionList.add(submission)
                                         }
-                                        recyclerView.adapter = TitleAdapter(submissionList)
+                                        recyclerView.adapter = OngoingAdapter(submissionList)
                                     }
                                 }
                             }

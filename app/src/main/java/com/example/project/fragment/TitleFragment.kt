@@ -97,61 +97,6 @@ class TitleFragment : Fragment() {
                             }
                     }
                 }
-
-//                document.reference.collection("users").get()
-//                    .addOnSuccessListener { subcollectionSnapshot ->
-//                        if (!subcollectionSnapshot.isEmpty) {
-//                            for (data in subcollectionSnapshot) {
-//                                // store the loop data for subcollection in a variable
-//                                val parentData = document.data
-//
-//                                // Toast.makeText(context, parentData.toString(), Toast.LENGTH_LONG).show()
-//
-//                                // store the parentData data for subcollection in the list
-//                                dataList.add(parentData)
-//
-//                                // Process the subdocument
-//                                val submission: Submission? =
-//                                    data.toObject(Submission::class.java)
-//                                if (submission != null) {
-//                                    submissionList.add(submission)
-//                                }
-//                            }
-//                            recyclerView.adapter = TitleAdapter(submissionList)
-//                        }
-//                        else {
-//                            val testing = i + 1
-//
-//                            submissionReference.get()
-//                                .addOnSuccessListener { submissionSnapshot2 ->
-//
-//                                    for (data in submissionSnapshot2) {
-//                                        Toast.makeText(context, testing.toString(), Toast.LENGTH_LONG).show()
-//                                        // retrieve the data of the current document
-//                                        val currentData = data.data
-//
-//                                        // Toast.makeText(context, currentData.toString(), Toast.LENGTH_LONG).show()
-//
-//                                        // check if the data of the current document is the same
-//                                        // as the stored data list
-//                                        if(dataList.contains(currentData)){
-//                                            // the submission is the same, skip the loop
-//                                            continue
-//
-//                                        }else{
-//                                            // Process the subdocument
-//                                            val submission: Submission? =
-//                                                data.toObject(Submission::class.java)
-//                                            if (submission != null) {
-//                                                submissionList.add(submission)
-//
-//                                            }
-//                                        }
-//                                    }
-//                                    recyclerView.adapter = TitleAdapter(submissionList)
-//                                }
-//                        }
-//                    }
             }
         }
 

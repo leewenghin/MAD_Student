@@ -96,7 +96,7 @@ class PosterAdapter(private val submissionList: ArrayList<Submission>) :
 
             // If Pending, Rejected or Approve, then show detail.
             fun checkDetail(){
-                val intent1 = Intent(view.context, PosterSubmissionActivity::class.java)
+                val intent1 = Intent(view.context, PosterSubmissionDetailActivity::class.java)
                 intent1.putExtra("submissionId", submissionId)
                 view.context.startActivity(intent1)
             }

@@ -125,7 +125,13 @@ class ThesisAdapter(private val submissionList: ArrayList<Submission>) :
                     view.context.startActivity(intent1)
                 }
                 "Pending" -> {
-                    checkDetail()
+                    val intent1 = Intent(view.context, ThesisSubmissionActivity::class.java)
+                    intent1.putExtra("submissionId", submissionId)
+                    intent1.putExtra("label", holder.label.text)
+                    intent1.putExtra("deadline", holder.due_date.text)
+                    intent1.putExtra("overdue", overdue)
+
+                    view.context.startActivity(intent1)
                 }
                 "Rejected" -> {
                     checkDetail()

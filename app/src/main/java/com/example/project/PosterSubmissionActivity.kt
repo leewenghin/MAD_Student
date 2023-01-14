@@ -148,7 +148,7 @@ class PosterSubmissionActivity : AppCompatActivity() {
                                 ).show()
                             }
 
-                        val intent = Intent(this, ProposalSubmissionDetailActivity::class.java)
+                        val intent = Intent(this, PosterSubmissionDetailActivity::class.java)
                         intent.putExtra("submissionId", newDocument.id)
                         // Remove current activity history to prevent navigate back
                         //intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_NO_HISTORY

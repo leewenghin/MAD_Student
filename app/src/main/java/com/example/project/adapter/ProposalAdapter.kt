@@ -14,6 +14,9 @@ import com.example.project.ProposalSubmissionActivity
 import com.example.project.ProposalSubmissionDetailActivity
 import com.example.project.R
 import com.example.project.Submission
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -28,6 +31,7 @@ class ProposalAdapter(private val submissionList: ArrayList<Submission>) :
         val Status: TextView = itemView.findViewById(R.id.status)
         val cardView: CardView = itemView.findViewById(R.id.cardView)
         val Title: TextView = itemView.findViewById(R.id.project_title)
+
         val colorStateListYellow = ContextCompat.getColorStateList(itemView.context,
             R.color.deep_yellow
         )
@@ -50,9 +54,11 @@ class ProposalAdapter(private val submissionList: ArrayList<Submission>) :
         holder.Status.text = submissionList[position].submission_status
         holder.Title.text = submissionList[position].title
 
-        // Replacing the submission_status
-
         val submissionId = submissionList[position].submission_id
+
+        val db = FirebaseFirestore.getInstance()
+
+        val userId = FirebaseAuth.getInstance().currentUser!!.uid
 
         // Deadline Date
         val dlDate = SimpleDateFormat("dd-MM-yyyy HH:mm").parse(holder.due_date.text as String)
@@ -125,7 +131,13 @@ class ProposalAdapter(private val submissionList: ArrayList<Submission>) :
                     view.context.startActivity(intent1)
                 }
                 "Pending" -> {
-                    checkDetail()
+                    val intent1 = Intent(view.context, ProposalSubmissionActivity::class.java)
+                    intent1.putExtra("submissionId", submissionId)
+                    intent1.putExtra("label", holder.label.text)
+                    intent1.putExtra("deadline", holder.due_date.text)
+                    intent1.putExtra("overdue", overdue)
+
+                    view.context.startActivity(intent1)
                 }
                 "Rejected" -> {
                     checkDetail()

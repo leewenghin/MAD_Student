@@ -150,6 +150,7 @@ class ProposalSubmissionActivity : AppCompatActivity() {
 
                         val intent = Intent(this, ProposalSubmissionDetailActivity::class.java)
                         intent.putExtra("submissionId", newDocument.id)
+                        intent.putExtra("Label", Label)
                         // Remove current activity history to prevent navigate back
                         //intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_NO_HISTORY
                         startActivity(intent)

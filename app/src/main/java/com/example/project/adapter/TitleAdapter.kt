@@ -65,24 +65,6 @@ class TitleAdapter(private val submissionList: ArrayList<Submission>) :
         calendar1.set(Calendar.HOUR_OF_DAY, dlHour)
         calendar1.set(Calendar.MINUTE, dlMinute)
 
-        // Replace student mark
-//        val db = FirebaseFirestore.getInstance()
-//        val userId = FirebaseAuth.getInstance().currentUser!!.uid
-//
-//        db.collection("submission").document(submissionId.toString()).get()
-//            .addOnSuccessListener { submissionSnapshot ->
-//                submissionSnapshot.reference.collection("users").document(userId).get()
-//                    .addOnSuccessListener { usersSnapshot ->
-//                        usersSnapshot.reference.collection("mark").get()
-//                            .addOnSuccessListener { markSnapshot ->
-//                                for(data in markSnapshot){
-//                                    val mark = data.getString("proposal")
-//                                    holder.label.text = mark
-//                                }
-//                            }
-//                    }
-//            }
-
         // Current Date
         val currentDate = Calendar.getInstance().time
 
